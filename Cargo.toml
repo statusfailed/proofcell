@@ -1,0 +1,9 @@
+[package]
+name = "proofcell"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+graphviz-rust = "0.9.6"
+open-hypergraphs = "0.2.7"
+open-hypergraphs-dot = "0.2.1"
