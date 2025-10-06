@@ -27,6 +27,13 @@ impl<O: Clone + PartialEq, A: Clone + PartialEq> Rewrite<O, A> {
         }
     }
 
+    pub fn identity(term: OpenHypergraph<O, A>) -> Self {
+        Rewrite {
+            source: term.clone(),
+            target: term,
+        }
+    }
+
     pub fn source(&self) -> &OpenHypergraph<O, A> {
         &self.source
     }
@@ -88,6 +95,16 @@ impl<O, A> Cell<O, A> {
         let s = vec![Type; m];
         let t = vec![Type; n];
         OpenHypergraph::singleton(self, s, t)
+    }
+
+    pub fn name(&self) -> &str {
+        match self {
+            Cell::Copy => "Copy",
+            Cell::R(_) => "R",
+            Cell::C0 => "C₀",
+            Cell::C1 => "C₁",
+            Cell::C2 => "C₂",
+        }
     }
 }
 
