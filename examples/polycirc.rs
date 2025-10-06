@@ -86,29 +86,29 @@ fn q(mut t: Term) -> Term {
     t
 }
 
-pub fn id() -> Term {
+fn id() -> Term {
     OpenHypergraph::identity(vec![Obj])
 }
 
-pub fn sub() -> Term {
+fn sub() -> Term {
     (&(&id() | &Arr::Neg.into()) >> &Arr::Add.into()).unwrap()
 }
 
-pub fn self_difference() -> Term {
+fn self_difference() -> Term {
     (&Arr::Copy.into() >> &sub()).unwrap()
 }
 
 // n-wire zero morphism
-pub fn zero() -> Term {
+fn zero() -> Term {
     (&Arr::Discard.term() >> &Arr::Zero.term()).unwrap()
 }
 
-pub fn mul_zero() -> Term {
+fn mul_zero() -> Term {
     let id_zero = &id() | &Arr::Zero.term();
     (&id_zero >> &Arr::Mul.term()).unwrap()
 }
 
-pub fn mul_one() -> Term {
+fn mul_one() -> Term {
     let id_one = &id() | &Arr::One.term();
     (&id_one >> &Arr::Mul.term()).unwrap()
 }
@@ -117,16 +117,16 @@ pub fn mul_one() -> Term {
 // Some axioms
 
 // x - x ~> 0
-pub fn self_difference_is_zero() -> Rewrite<Obj, Arr> {
+fn self_difference_is_zero() -> Rewrite<Obj, Arr> {
     Rewrite::new(self_difference(), zero()).unwrap()
 }
 
 // 0 ~> x*0
-pub fn zero_is_annihilation() -> Rewrite<Obj, Arr> {
+fn zero_is_annihilation() -> Rewrite<Obj, Arr> {
     Rewrite::new(zero(), mul_zero()).unwrap()
 }
 
-pub fn mul_id() -> Rewrite<Obj, Arr> {
+fn mul_id() -> Rewrite<Obj, Arr> {
     Rewrite::new(mul_one(), id()).unwrap()
 }
 
@@ -134,7 +134,7 @@ pub fn mul_id() -> Rewrite<Obj, Arr> {
 // Proofs
 
 /// Proof that 1x + (-1x) = 0x
-pub fn mul_id_self_difference_is_annihilation() -> Proof<Obj, Arr> {
+fn mul_id_self_difference_is_annihilation() -> Proof<Obj, Arr> {
     let a =
         &axiom(self_difference_is_zero()) | &(&axiom(zero_is_annihilation()) | &axiom(mul_id()));
     let b = &Cell::C2.proof() | &OpenHypergraph::identity(vec![proof::Type]);
@@ -149,7 +149,7 @@ pub fn main() {
     // save svg
     let display = proof
         .clone()
-        .map_edges(|_e| format!(""))
+        .map_edges(|e| format!("{}", e.name()))
         .map_nodes(|_n| format!(""));
     svg::save_svg(&display, "proof.svg".as_ref()).unwrap();
 
